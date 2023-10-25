@@ -1,0 +1,32 @@
+﻿@page
+@model DomainCentricDemo.WebApp.Pages.Book.IndexModel
+@using DomainCentricDemo.Application.Dto;
+@using System.Reflection;
+@{
+  <h1>Books</h1>
+
+    <a asp-page="./Create">Add new Book</a>
+
+    <table class="table">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Authors</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (BookViewModel book in Model.Books) {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Description</td>
+                <td>
+                    @string.Join(", ", book.Authors!.Select(auth => auth.SirName + " " + auth.FirstName))
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@book.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@book.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@book.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
