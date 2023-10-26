@@ -1,23 +1,28 @@
-﻿using DomainCentricDemo.Application.Dto;
+﻿using AutoMapper;
+using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
-using DomainCentricDemo.Domain;
 
 namespace DomainCentricDemo.Application.Implementation {
     public class BookCommand : IBookCommand {
         private readonly IBookRepository _bookRepository;
+        private readonly IMapper _Mapper = null!;
 
         public BookCommand(IBookRepository bookRepository) {
+
+            MapperConfiguration config = new MapperConfiguration(config => {
+                config.CreateMap<Domain.Book, BookCommandRequestDto>();
+                config.CreateMap<Domain.Book, BookUpdateRequestDto>();
+                config.CreateMap<Domain.Author, AuthorDto>();
+            });
+
+            _Mapper = new Mapper(config);
+
             _bookRepository = bookRepository;
         }
 
         void IBookCommand.Create(BookCommandRequestDto createRequest) {
             //Create domain object
-            var book = new Book {
-                Authors = createRequest.Authors,
-                Description = createRequest.Description,
-                Title = createRequest.Title,
-                RowVersion = createRequest.RowVersion,
-            };
+            Domain.Book book = _Mapper.Map<Domain.Book>(createRequest);
 
             //Persist domain object
             _bookRepository.Create(book);
@@ -27,7 +32,7 @@ namespace DomainCentricDemo.Application.Implementation {
 
         void IBookCommand.Delete(BookDeleteRequestDto deleteRequest) {
             // load
-            Book book = _bookRepository.Load(deleteRequest.Id);
+            Domain.Book book = _bookRepository.Load(deleteRequest.Id);
 
             // commit
             _bookRepository.Delete(book);
@@ -38,13 +43,10 @@ namespace DomainCentricDemo.Application.Implementation {
         void IBookCommand.Update(BookUpdateRequestDto updateRequest) {
 
             // load
-            Book book = _bookRepository.Load(updateRequest.Id);
+            Domain.Book book = _bookRepository.Load(updateRequest.Id);
 
             // update
-            book.Title = updateRequest.Title;
-            book.Authors = updateRequest.Authors.Select(auth => new Author { Id = auth.Id }).ToList();
-            book.Description = updateRequest.Description;
-            book.RowVersion = updateRequest.RowVersion;
+            book = _Mapper.Map<Domain.Book>(updateRequest);
 
             // commit
             _bookRepository.Save(book);

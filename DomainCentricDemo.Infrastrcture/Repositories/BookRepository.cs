@@ -14,13 +14,11 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
 
         Book IBookRepository.Load(int id) => _db.Books.AsNoTracking()
             .Include(book => book.Authors)
-            .ThenInclude(auth => auth.Books)
             .First(book => book.Id == id);
 
         IEnumerable<Book> IBookRepository.GetAll() => _db.Books
             .AsNoTracking()
-            .Include(book => book.Authors)
-            .ThenInclude(auth => auth.Books);
+            .Include(book => book.Authors);
 
         void IBookRepository.Create(Book book) => _db.Books.Add(book);
 

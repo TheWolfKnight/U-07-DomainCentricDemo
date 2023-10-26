@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DomainCentricDemo.Application.Dto;
+
 
 namespace DomainCentricDemo.Application.Interface {
     public interface IAuthorCommand {
+
+        void Create(AuthorCommandRequestDto createRequest);
+        void Delete(AuthorDeleteRequestDto deleteRequest);
+        void Update(AuthorUpdateRequestDto updateRequest);
     }
 }

@@ -16,7 +16,7 @@ namespace DomainCentricDemo.Infrastrcture {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (_designTime) {
                 optionsBuilder.UseSqlServer(
-                    @"Server=(localdb)\\mssqllocaldb;Database=BookDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
+                    @"Server=(localdb)\\mssqllocaldb;Initial Catalog=BookDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
             }
         }
 
