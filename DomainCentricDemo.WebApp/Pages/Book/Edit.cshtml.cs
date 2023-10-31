@@ -1,5 +1,7 @@
-﻿using DomainCentricDemo.Application.Dto;
+﻿using AutoMapper;
+using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
+using DomainCentricDemo.WebApp.Pages.Author;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,27 +11,30 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         private readonly IBookQuery _Query;
         private readonly IBookCommand _Command;
 
+        private readonly IMapper _Mapper;
+
         [BindProperty]
         public BookViewModel Book { get; set; } = default!;
 
         public EditModel(IBookQuery query, IBookCommand command) {
             _Query = query;
             _Command = command;
+
+            MapperConfiguration config = new MapperConfiguration(config => {
+                config.CreateMap<BookDto,BookViewModel>();
+                config.CreateMap<BookViewModel, BookUpdateRequestDto>();
+            });
+            _Mapper = new Mapper(config);
         }
 
         public IActionResult OnGet(int? id) {
-            if (id == null) return NotFound();
+            if (!id.HasValue) return NotFound();
 
             BookDto book = _Query.Get(id.Value);
             if (book == null) return NotFound();
 
-            Book = new BookViewModel {
-                Id = book.Id,
-                Title = book.Title,
-                Authors = book.Authors,
-                Description = book.Description,
-                RowVersion = book.RowVersion,
-            };
+            Book = _Mapper.Map<BookViewModel>(book);
+
             return Page();
         }
 
@@ -38,13 +43,7 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         public IActionResult OnPost() {
             if (!ModelState.IsValid) return Page();
 
-            _Command.Update(new BookUpdateRequestDto {
-                Id = Book.Id,
-                Title = Book.Title,
-                Authors = Book.Authors,
-                Description = Book.Description,
-                RowVersion = Book.RowVersion
-            });
+            _Command.Update(_Mapper.Map<BookUpdateRequestDto>(Book));
 
             return RedirectToPage("./Index");
         }

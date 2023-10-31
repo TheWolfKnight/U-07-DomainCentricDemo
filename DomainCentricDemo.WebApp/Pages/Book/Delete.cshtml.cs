@@ -1,4 +1,5 @@
-﻿using DomainCentricDemo.Application.Dto;
+﻿using AutoMapper;
+using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,12 +9,21 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         private readonly IBookCommand _Command = null!;
         private readonly IBookQuery _Query = null!;
 
+        private readonly IMapper _Mapper;
+
         [BindProperty]
         public BookViewModel Book { get; set; } = default!;
 
         public DeleteModel(IBookQuery query, IBookCommand command) {
             _Query = query;
             _Command = command;
+
+            MapperConfiguration config = new MapperConfiguration(config => {
+                config.CreateMap<Domain.Book, BookViewModel>();
+                config.CreateMap<BookViewModel, BookDeleteRequestDto>();
+            });
+            _Mapper = new Mapper(config);
+
         }
 
 
@@ -23,12 +33,7 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
             BookDto book = _Query.Get(id.Value);
             if (book == null) return NotFound();
 
-            Book = new BookViewModel {
-                Id = book.Id,
-                Title = book.Title,
-                Authors = book.Authors,
-                Description = book.Description,
-            };
+            Book = _Mapper.Map<BookViewModel>(book);
 
             return Page();
         }
@@ -36,7 +41,7 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         public IActionResult OnPostAsync(int? id) {
             if (!id.HasValue) return NotFound();
 
-            _Command.Delete(new BookDeleteRequestDto { Id = id.Value });
+            _Command.Delete(_Mapper.Map<BookDeleteRequestDto>(Book));
 
             return RedirectToPage("./Index");
         }
