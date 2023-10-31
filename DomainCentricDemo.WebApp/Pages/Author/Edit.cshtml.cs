@@ -8,70 +8,73 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DomainCentricDemo.Domain;
 using DomainCentricDemo.Infrastrcture;
+using DomainCentricDemo.Application.Interface;
+using DomainCentricDemo.Application.Dto;
+using AutoMapper;
 
 namespace DomainCentricDemo.WebApp.Pages.Author
 {
-    public class EditModel : PageModel
+  public class EditModel : PageModel
+  {
+
+    private readonly IAuthorCommand _Command;
+    private readonly IAuthorQuery _Query;
+
+    private readonly IMapper _Mapper;
+
+    public EditModel(IAuthorQuery query, IAuthorCommand command)
     {
-        private readonly DomainCentricDemo.Infrastrcture.BookContext _context;
+      _Command = command;
+      _Query = query;
 
-        public EditModel(DomainCentricDemo.Infrastrcture.BookContext context)
-        {
-            _context = context;
-        }
-
-        [BindProperty]
-        public AuthorViewModel Author { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Authors == null)
-            {
-                return NotFound();
-            }
-
-            var author =  await _context.Authors.FirstOrDefaultAsync(m => m.Id == id);
-            if (author == null)
-            {
-                return NotFound();
-            }
-            Author = author;
-            return Page();
-        }
-
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Author).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuthorExists(Author.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool AuthorExists(int id)
-        {
-          return (_context.Authors?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+      MapperConfiguration config = new MapperConfiguration(config =>
+      {
+        config.CreateMap<AuthorDto, AuthorViewModel>();
+        config.CreateMap<AuthorViewModel, AuthorCommandRequestDto>();
+      });
+      _Mapper = new Mapper(config);
     }
+
+    [BindProperty]
+    public AuthorViewModel Author { get; set; } = default!;
+
+    public IActionResult OnGet(int? id)
+    {
+      if (id == null)
+      {
+        return NotFound();
+      }
+
+      AuthorDto author = _Query.Get(id.Value);
+      if (author == null) return NotFound();
+
+      Author = new AuthorViewModel
+      {
+        Id = author.Id,
+        FirstName = author.FirstName,
+        SirName = author.SirName,
+        Books = author.Books,
+        RowVersion = author.RowVersion,
+      };
+
+      return Page();
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public IActionResult OnPost()
+    {
+      if (!ModelState.IsValid)
+      {
+        return Page();
+      }
+
+      _Command.Update(_Mapper.Map<AuthorUpdateRequestDto>(Author));
+
+
+      return RedirectToPage("./Index");
+    }
+
+
+  }
 }
