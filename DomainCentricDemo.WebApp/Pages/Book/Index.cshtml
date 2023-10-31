@@ -8,12 +8,14 @@
     <a asp-page="./Create">Add new Book</a>
 
     <table class="table">
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Authors</th>
-            <th>Actions</th>
-        </tr>
+	    <thead>
+		    <tr>
+			    <th>Title</th>
+			    <th>Description</th>
+			    <th>Authors</th>
+			    <th>Actions</th>
+		    </tr>
+	    </thead>
 	    @foreach (BookViewModel book in Model.Books) {
 		    <tr>
 			    <td>@book.Title</td>

@@ -5,12 +5,16 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<head>
+	<link rel="stylesheet" href="~/css/site.css" />
+</head>
+
 
 <h1>Edit</h1>
 
 <h4>Book</h4>
 <hr />
-<table class="row">
+<div class="row">
 	<table class="col-md-4">
 		<form method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -26,35 +30,32 @@
 				<input asp-for="Book.Description" class="form-control" />
 				<span asp-validation-for="Book.Description" class="text-danger"></span>
 			</div>
-			<table class="table">
-				<label asp-for="Book.Authors" class="control-label"></label>
-				@foreach (var author in Model.Book.Authors!)
-				{
-					<tr>
-					<td>@author.FirstName @author.SirName</td>
+			<div class="form-group">
+				<table class="table author-table" style="border-radius: 10px;">
+					<label asp-for="Book.Authors" class="control-label"></label>
+					@foreach (var author in Model.Book.Authors!)
+					{
+						<tr>
+							<td>@author.FirstName @author.SirName</td>
+							<td>
+								<a asp-page="./Delete" asp-route-id="@author.Id">Delete</a>
+							</td>
+						</tr>
+					}
+					<td>
 						<td>
-							<a asp-page="./Edit" asp-route-id="@author.Id">Edit</a> |
-							<a asp-page="./Delete" asp-route-id="@author.Id">Delete</a>
+							<a asp-page="../Author/Create">Add author</a>
 						</td>
-					</tr>
-				}
-				<td>
-				<td>
-					<a asp-page="./Add">Add author</a>
-				</td>
-				</td>
-				<span asp-validation-for="Book.Authors" class="text-danger"></span>
-			</table>
+					</td>
+					<span asp-validation-for="Book.Authors" class="text-danger"></span>
+				</table>
+			</div>
 			<div class="form-group">
 				<input type="submit" value="Save" class="btn btn-primary" />
+				<a asp-page="./Index" class="btn btn-danger">Back to List</a>
 			</div>
 		</form>
 	</table>
-</table>
-
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {
