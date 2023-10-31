@@ -10,9 +10,8 @@ namespace DomainCentricDemo.Application.Implementation {
         public BookCommand(IBookRepository bookRepository) {
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<Domain.Book, BookCommandRequestDto>();
-                config.CreateMap<Domain.Book, BookUpdateRequestDto>();
-                config.CreateMap<Domain.Author, AuthorDto>();
+                config.CreateMap<BookCommandRequestDto, Domain.Book>();
+                config.CreateMap<BookUpdateRequestDto, Domain.Book>();
             });
 
             _Mapper = new Mapper(config);
@@ -27,7 +26,6 @@ namespace DomainCentricDemo.Application.Implementation {
             //Persist domain object
             _bookRepository.Create(book);
             _bookRepository.Commit();
-
         }
 
         void IBookCommand.Delete(BookDeleteRequestDto deleteRequest) {

@@ -35,7 +35,7 @@ builder.Services.AddDbContext<BookContext>(options =>
 
 //add-migration Init -Project DomainCentricDemo.Infrastrcture -Context BookContext
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
