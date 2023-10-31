@@ -15,7 +15,10 @@ namespace DomainCentricDemo.Infrastrcture.Queries {
         private readonly IMapper _Mapper = null!;
 
         public AuthorQuery(IAuthorRepository repo) {
-            MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Domain.Author, AuthorDto>());
+            MapperConfiguration config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Domain.Book, BookDto>();
+                cfg.CreateMap<Domain.Author, AuthorDto>();
+            });
             _Mapper = new Mapper(config);
 
             this._repo = repo;
