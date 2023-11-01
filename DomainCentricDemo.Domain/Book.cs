@@ -6,12 +6,14 @@ namespace DomainCentricDemo.Domain {
         // Man deler ting op i ting, der ændrer sig. Entities kan ændre sig, og de har derfor et id
 
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public List<Author> Authors { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+
+        [MinLength(1)]
+        public List<Author> Authors { get; set; } = null!;
 
         [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public byte[] RowVersion { get; set; } = null!;
 
         // Skal have noget funktionalitet hen ad vejen for at det bliver en god model
     }

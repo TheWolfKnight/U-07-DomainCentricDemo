@@ -10,12 +10,13 @@ namespace DomainCentricDemo.Domain {
 
         public int Id { get; set; }
 
-        public string FirstName { get; set; }
-        public string SirName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string SirName { get; set; } = string.Empty;
 
-        public List<Book> Books { get; set; }
+        [MaxLength(5)]
+        public List<Book> Books { get; set; } = null!;
 
         [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public byte[] RowVersion { get; set; } = null!;
     }
 }
