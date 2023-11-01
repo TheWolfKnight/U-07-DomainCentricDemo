@@ -14,7 +14,7 @@
 <h4>Book</h4>
 <hr />
 <div class="row">
-	<div class="col-md-4">
+	<div class="form-group">
 		<form method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="Book.Id" />
@@ -29,9 +29,9 @@
 				<input asp-for="Book.Description" class="form-control" />
 				<span asp-validation-for="Book.Description" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label asp-for="Book.AuthorIds" class="control-label"></label>
-				<table class="table author-table">
+			<label asp-for="Book.AuthorIds" class="control-label"></label>
+			<div class="table-form">
+				<table class="table mb-0 table-striped table-hover">
 					<tr>
 						<th>Author Name</th>
 						<th>Action</th>
@@ -52,9 +52,9 @@
 						</td>
 					</tr>
 				</table>
-				<span asp-validation-for="Book.AuthorIds" class="text-danger"></span>
 			</div>
-			<div class="form-group">
+				<span asp-validation-for="Book.AuthorIds" class="text-danger"></span>
+			<div class="form-group mt-3">
 				<input type="submit" value="Save" class="btn btn-primary" />
 				<a asp-page="./Index" class="btn btn-danger">Back to List</a>
 			</div>
