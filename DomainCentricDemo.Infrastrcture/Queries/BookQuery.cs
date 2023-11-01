@@ -12,7 +12,10 @@ public class BookQuery : IBookQuery {
     private readonly IMapper _Mapper = null!;
 
     public BookQuery(IBookRepository repo) {
-        MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Domain.Book, BookDto>());
+        MapperConfiguration config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Domain.Book, BookDto>();
+            cfg.CreateMap<Domain.Author, AuthorDto>();
+        });
         _Mapper = new Mapper(config);
         this._repo = repo;
     }
@@ -21,10 +24,7 @@ public class BookQuery : IBookQuery {
         Domain.Book? book = _repo.Load(id);
         if (book == null) return null!;
 
-        MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Domain.Book, BookDto>());
-        Mapper mapper = new Mapper(config);
-
-        return mapper.Map<BookDto>(book);
+		return _Mapper.Map<BookDto>(book);
     }
 
     public IEnumerable<BookDto> GetAll() {

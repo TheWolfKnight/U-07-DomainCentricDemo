@@ -17,10 +17,12 @@ namespace DomainCentricDemo.Application.Implementation {
 
         public AuthorCommand(IAuthorRepository authorRepository) {
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<Domain.Author, AuthorCommandRequestDto>();
-                config.CreateMap<Domain.Author, AuthorUpdateRequestDto>();
-                config.CreateMap<Domain.Book, BookDto>();
+                config.CreateMap<AuthorCommandRequestDto, Domain.Author>();
+                config.CreateMap<AuthorUpdateRequestDto, Domain.Author>();
+                config.CreateMap<BookDto, Domain.Book>();
             });
+            _Mapper = new Mapper(config);
+
             _AuthorRepository = authorRepository;
         }
 

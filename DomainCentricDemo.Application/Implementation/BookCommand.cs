@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
 

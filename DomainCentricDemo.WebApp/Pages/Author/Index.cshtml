@@ -22,7 +22,9 @@
 @foreach (AuthorViewModel item in Model.Authors) {
         <tr>
             <td>@item.SirName @item.FirstName</td>
-            <td>@item.Books</td>
+	        <td>
+		        @string.Join(", ", item.Books.Select(book => $"{book.Title}"))
+	        </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
