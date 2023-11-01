@@ -4,51 +4,54 @@ using DomainCentricDemo.Application.Interface;
 
 namespace DomainCentricDemo.Application.Implementation {
     public class BookCommand : IBookCommand {
-        private readonly IBookRepository _bookRepository;
+
+        private readonly IBookRepository _BookRepository;
         private readonly IMapper _Mapper = null!;
 
-        public BookCommand(IBookRepository bookRepository) {
+        public BookCommand(IBookRepository bookRepository, IAuthorRepository authorRepo) {
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<BookCommandRequestDto, Domain.Book>();
+                config.CreateMap<BookCommandRequestDto, Domain.Book>()
+                    .BeforeMap((dto, dom) => dom.Authors = dto.AuthorIds.Select(authorRepo.Load).ToArray());
                 config.CreateMap<BookUpdateRequestDto, Domain.Book>();
             });
 
             _Mapper = new Mapper(config);
 
-            _bookRepository = bookRepository;
+            _BookRepository = bookRepository;
         }
 
         void IBookCommand.Create(BookCommandRequestDto createRequest) {
+
             //Create domain object
             Domain.Book book = _Mapper.Map<Domain.Book>(createRequest);
 
             //Persist domain object
-            _bookRepository.Create(book);
-            _bookRepository.Commit();
+            _BookRepository.Save(book);
+            _BookRepository.Commit();
         }
 
         void IBookCommand.Delete(BookDeleteRequestDto deleteRequest) {
             // load
-            Domain.Book book = _bookRepository.Load(deleteRequest.Id);
+            Domain.Book book = _BookRepository.Load(deleteRequest.Id);
 
             // commit
-            _bookRepository.Delete(book);
-            _bookRepository.Commit();
+            _BookRepository.Delete(book);
+            _BookRepository.Commit();
 
         }
 
         void IBookCommand.Update(BookUpdateRequestDto updateRequest) {
 
             // load
-            Domain.Book book = _bookRepository.Load(updateRequest.Id);
+            Domain.Book book = _BookRepository.Load(updateRequest.Id);
 
             // update
             book = _Mapper.Map<Domain.Book>(updateRequest);
 
             // commit
-            _bookRepository.Save(book);
-            _bookRepository.Commit();
+            _BookRepository.Save(book);
+            _BookRepository.Commit();
 
         }
 

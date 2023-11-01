@@ -10,7 +10,8 @@ namespace DomainCentricDemo.Domain {
         public string Description { get; set; } = string.Empty;
 
         [MinLength(1)]
-        public List<Author> Authors { get; set; } = null!;
+        [MaxLength(5)]
+        public ICollection<Author>? Authors { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; } = null!;

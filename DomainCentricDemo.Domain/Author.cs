@@ -13,8 +13,7 @@ namespace DomainCentricDemo.Domain {
         public string FirstName { get; set; } = string.Empty;
         public string SirName { get; set; } = string.Empty;
 
-        [MaxLength(5)]
-        public List<Book> Books { get; set; } = null!;
+        public ICollection<Book>? Books { get; set; } = new List<Book>();
 
         [Timestamp]
         public byte[] RowVersion { get; set; } = null!;

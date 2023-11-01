@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace DomainCentricDemo.WebApp.Pages.Book {
     public class EditModel : PageModel {
 
-        private readonly IBookQuery _Query;
+        private readonly IAuthorQuery _AuthorQuery;
+        private readonly IBookQuery _BookQuery;
         private readonly IBookCommand _Command;
 
         private readonly IMapper _Mapper;
@@ -16,12 +17,14 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         [BindProperty]
         public BookViewModel Book { get; set; } = default!;
 
-        public EditModel(IBookQuery query, IBookCommand command) {
-            _Query = query;
+        public EditModel(IBookQuery query, IBookCommand command, IAuthorQuery authorQuery) {
+            _AuthorQuery = authorQuery;
+            _BookQuery = query;
             _Command = command;
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<BookDto,BookViewModel>();
+                config.CreateMap<BookDto, BookViewModel>()
+                    .BeforeMap((dto, viewModel) => viewModel.AuthorIds = dto.Authors?.Select(auth => auth.Id));
                 config.CreateMap<BookViewModel, BookUpdateRequestDto>();
             });
             _Mapper = new Mapper(config);
@@ -30,7 +33,7 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         public IActionResult OnGet(int? id) {
             if (!id.HasValue) return NotFound();
 
-            BookDto book = _Query.Get(id.Value);
+            BookDto book = _BookQuery.Get(id.Value);
             if (book == null) return NotFound();
 
             Book = _Mapper.Map<BookViewModel>(book);
@@ -47,5 +50,13 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
 
             return RedirectToPage("./Index");
         }
+
+        public IEnumerable<AuthorDto> GetBookAuthors() {
+            if (Book.AuthorIds == null) yield break;
+            foreach (AuthorDto author in Book.AuthorIds.Select(_AuthorQuery.Get))
+                yield return author;
+            yield break;
+        }
+
     }
 }

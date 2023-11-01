@@ -12,7 +12,8 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
 
         void IBookRepository.Delete(Book book) => _db.Books.Remove(book);
 
-        Book IBookRepository.Load(int id) => _db.Books.AsNoTracking()
+        Book IBookRepository.Load(int id) => _db.Books
+            .AsNoTracking()
             .Include(book => book.Authors)
             .First(book => book.Id == id);
 
@@ -22,6 +23,12 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
 
         void IBookRepository.Create(Book book) => _db.Books.Add(book);
 
-        void IBookRepository.Save(Book book) => _db.Books.Update(book);
+        void IBookRepository.Save(Book book) {
+            if (book.Authors != null)
+                foreach (Author author in book.Authors)
+                    _db.Attach(author);
+
+            _db.Books.Update(book);
+        }
     }
 }

@@ -29,7 +29,10 @@ namespace DomainCentricDemo.Infrastrcture.Migrations
                     b.Property<int>("BooksId")
                         .HasColumnType("int");
 
-                    b.HasKey("AuthorsId", "BooksId");
+                    b.Property<int>("PK")
+                        .HasColumnType("int");
+
+                    b.HasKey("PK");
 
                     b.HasIndex("BooksId");
 

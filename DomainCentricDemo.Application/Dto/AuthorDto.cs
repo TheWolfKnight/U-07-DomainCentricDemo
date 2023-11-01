@@ -10,11 +10,11 @@ namespace DomainCentricDemo.Application.Dto {
     public class AuthorDto {
         public int Id { get; set; }
 
-        public string FirstName { get; set; }
-        public string SirName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string SirName { get; set; } = string.Empty;
 
-        public List<BookDto> Books { get; set; }
+        public List<BookDto>? Books { get; set; } = null!;
 
-        public byte[] RowVersion { get; set; }
+        public byte[] RowVersion { get; set; } = null!;
     }
 }

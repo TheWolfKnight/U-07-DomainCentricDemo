@@ -7,7 +7,7 @@ using AutoMapper;
 namespace DomainCentricDemo.Infrastrcture.Queries;
 
 public class BookQuery : IBookQuery {
-    private readonly IBookRepository _repo;
+    private readonly IBookRepository _Repo;
 
     private readonly IMapper _Mapper = null!;
 
@@ -17,18 +17,18 @@ public class BookQuery : IBookQuery {
             cfg.CreateMap<Domain.Author, AuthorDto>();
         });
         _Mapper = new Mapper(config);
-        this._repo = repo;
+        this._Repo = repo;
     }
 
     BookDto IBookQuery.Get(int id) {
-        Domain.Book? book = _repo.Load(id);
+        Domain.Book? book = _Repo.Load(id);
         if (book == null) return null!;
 
-		return _Mapper.Map<BookDto>(book);
+        return _Mapper.Map<BookDto>(book);
     }
 
     public IEnumerable<BookDto> GetAll() {
-        foreach (Domain.Book book in _repo.GetAll())
+        foreach (Domain.Book book in _Repo.GetAll())
             yield return _Mapper.Map<BookDto>(book);
 
         yield break;

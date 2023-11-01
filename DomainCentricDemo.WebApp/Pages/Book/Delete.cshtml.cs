@@ -19,13 +19,12 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
             _Command = command;
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<Domain.Book, BookViewModel>();
+                config.CreateMap<BookDto, BookViewModel>();
                 config.CreateMap<BookViewModel, BookDeleteRequestDto>();
             });
             _Mapper = new Mapper(config);
 
         }
-
 
         public IActionResult OnGet(int? id) {
             if (!id.HasValue) return NotFound();

@@ -29,6 +29,12 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
         IEnumerable<Author> IAuthorRepository.GetAll() => _db.Authors.AsNoTracking()
             .Include(auth => auth.Books);
 
-        void IAuthorRepository.Save(Author author) => _db.Authors.Update(author);
+        void IAuthorRepository.Save(Author author) {
+            if (author.Books != null)
+                foreach (Book book in author.Books)
+                    _db.Attach(book);
+
+            _db.Authors.Update(author);
+        }
     }
 }

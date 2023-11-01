@@ -21,7 +21,7 @@
 			    <td>@book.Title</td>
 			    <td>@book.Description</td>
 			    <td>
-				    @string.Join(", ", book.Authors!.Select(author => $"{author.FirstName} {author.SirName}"))
+				    @string.Join(", ", Model.GetBookAuthors(book).Select(author => $"{author.SirName} {author.FirstName}"))
 			    </td>
 			    <td>
 				    <a asp-page="./Edit" asp-route-id="@book.Id">Edit</a> |

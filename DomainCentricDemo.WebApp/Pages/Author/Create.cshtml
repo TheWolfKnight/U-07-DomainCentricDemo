@@ -15,23 +15,18 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Author.FirstName" class="control-label"></label>
+                <label asp-for="Author.FirstName" class="control-label">First Name</label>
                 <input asp-for="Author.FirstName" class="form-control" />
                 <span asp-validation-for="Author.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author.SirName" class="control-label"></label>
+                <label asp-for="Author.SirName" class="control-label">Surname</label>
                 <input asp-for="Author.SirName" class="form-control" />
                 <span asp-validation-for="Author.SirName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Author.Books" class="control-label">Select Books</label>
-                @Html.DropDownList("Authors",
-                                   Model._BookQuery
-                                    .GetAll()
-                                    .Select(book => new SelectListItem { Text=book.Title, Value=book.Id.ToString() }),
-                                  new {@class="form-control", multiple = "true"})
-
+                <select></select>
                 <span asp-validation-for="Author.Books" class="text-danger"></span>
             </div>
             <div class="form-group">

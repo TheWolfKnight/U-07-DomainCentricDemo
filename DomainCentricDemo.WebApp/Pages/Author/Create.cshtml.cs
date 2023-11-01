@@ -12,7 +12,7 @@ namespace DomainCentricDemo.WebApp.Pages.Author
 {
     public class CreateModel : PageModel
     {
-        public readonly IBookQuery _BookQuery = null!;
+        public readonly IBookQuery BookQuery = null!;
 
         private readonly IAuthorCommand _Command = null!;
 
@@ -23,12 +23,12 @@ namespace DomainCentricDemo.WebApp.Pages.Author
 
         public CreateModel(IAuthorCommand command, IBookQuery bookQuery) {
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<AuthorCommandRequestDto, AuthorViewModel>();
+                config.CreateMap<AuthorViewModel, AuthorCommandRequestDto>();
             });
             _Mapper = new Mapper(config);
 
             _Command = command;
-            _BookQuery = bookQuery;
+            BookQuery = bookQuery;
         }
 
         public IActionResult OnGet()

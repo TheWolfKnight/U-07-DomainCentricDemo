@@ -4,24 +4,36 @@ using DomainCentricDemo.Application.Interface;
 using DomainCentricDemo.WebApp.Pages.Author;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DomainCentricDemo.WebApp.Pages.Book;
 
 public class CreateModel : PageModel {
-    private readonly IBookCommand _bookCommand;
+
+    public readonly IAuthorQuery AuthorQuery;
+
+    private readonly IBookCommand _BookCommand;
 
     private readonly IMapper _Mapper;
 
     [BindProperty]
     public BookViewModel Book { get; set; } = default!;
 
-    public CreateModel(IBookCommand bookCommand) {
-        _bookCommand = bookCommand;
+    public SelectList AuthorList { get; set; }
+
+    public CreateModel(IBookCommand bookCommand, IAuthorQuery query) {
+        _BookCommand = bookCommand;
+        AuthorQuery = query;
 
         MapperConfiguration config = new MapperConfiguration(config => {
             config.CreateMap<BookViewModel, BookCommandRequestDto>();
+            config.CreateMap<AuthorDto, Domain.Author>();
         });
         _Mapper = new Mapper(config);
+
+        AuthorList = new SelectList(query.GetAll()
+                                     .Select(auth => new { Id = auth.Id, FullName = $"{auth.SirName} {auth.FirstName}" }),
+                                    "Id", "FullName");
     }
 
     public IActionResult OnGet() {
@@ -32,7 +44,7 @@ public class CreateModel : PageModel {
     public IActionResult OnPost() {
         if (!ModelState.IsValid) return Page();
 
-        _bookCommand.Create(_Mapper.Map<BookCommandRequestDto>(Book));
+        _BookCommand.Create(_Mapper.Map<BookCommandRequestDto>(Book));
 
         return RedirectToPage("./Index");
     }
