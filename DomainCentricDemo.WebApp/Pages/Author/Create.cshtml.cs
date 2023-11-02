@@ -34,7 +34,7 @@ namespace DomainCentricDemo.WebApp.Pages.Author
             BookList = new SelectList(
                 bookQuery
                     .GetAll()
-                    .Select(book => new { Id = book.Id, Title = book.Title }),
+                    .Select(book => new { book.Id, book.Title }),
                 "Id", "Title");
         }
 
