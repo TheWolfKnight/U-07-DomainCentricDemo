@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DomainCentricDemo.Application.Interface;
 using AutoMapper;
 using DomainCentricDemo.Application.Dto;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DomainCentricDemo.WebApp.Pages.Author
 {
     public class CreateModel : PageModel
     {
-        public readonly IBookQuery BookQuery = null!;
 
         private readonly IAuthorCommand _Command = null!;
 
@@ -21,6 +21,8 @@ namespace DomainCentricDemo.WebApp.Pages.Author
         [BindProperty]
         public AuthorViewModel Author { get; set; } = default!;
 
+        public SelectList BookList { get; set; } = null!;
+
         public CreateModel(IAuthorCommand command, IBookQuery bookQuery) {
             MapperConfiguration config = new MapperConfiguration(config => {
                 config.CreateMap<AuthorViewModel, AuthorCommandRequestDto>();
@@ -28,7 +30,12 @@ namespace DomainCentricDemo.WebApp.Pages.Author
             _Mapper = new Mapper(config);
 
             _Command = command;
-            BookQuery = bookQuery;
+
+            BookList = new SelectList(
+                bookQuery
+                    .GetAll()
+                    .Select(book => new { Id = book.Id, Title = book.Title }),
+                "Id", "Title");
         }
 
         public IActionResult OnGet()

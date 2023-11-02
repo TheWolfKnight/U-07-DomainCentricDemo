@@ -27,7 +27,6 @@ public class CreateModel : PageModel {
 
         MapperConfiguration config = new MapperConfiguration(config => {
             config.CreateMap<BookViewModel, BookCommandRequestDto>();
-            config.CreateMap<AuthorDto, Domain.Author>();
         });
         _Mapper = new Mapper(config);
 

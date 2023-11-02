@@ -1,7 +1,4 @@
-﻿
-using DomainCentricDemo.Application.Dto;
-
-namespace DomainCentricDemo.WebApp.Pages.Author {
+﻿namespace DomainCentricDemo.WebApp.Pages.Author {
     public class AuthorViewModel {
 
 
@@ -10,7 +7,7 @@ namespace DomainCentricDemo.WebApp.Pages.Author {
         public string FirstName { get; set; } = string.Empty;
         public string SirName { get; set; } = string.Empty;
 
-        public List<BookDto> Books { get; set; } = null!;
+        public IEnumerable<int> BookIds { get; set; } = null!;
 
         public byte[] RowVersion { get; set; } = null!;
 

@@ -11,7 +11,7 @@ namespace DomainCentricDemo.Application.Dto {
         public string FirstName { get; set; } = string.Empty;
         public string SirName { get; set; } = string.Empty;
 
-        public List<BookDto>? Books { get; set; } = null!;
+        public IEnumerable<int> Books { get; set; } = null!;
 
         public byte[] RowVersion { get; set; } = null!;
 

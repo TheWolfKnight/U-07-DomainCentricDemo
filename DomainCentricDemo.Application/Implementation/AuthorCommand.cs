@@ -15,11 +15,11 @@ namespace DomainCentricDemo.Application.Implementation {
 
         private readonly IMapper _Mapper = null!;
 
-        public AuthorCommand(IAuthorRepository authorRepository) {
+        public AuthorCommand(IAuthorRepository authorRepository, IBookRepository bookRepo) {
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<AuthorCommandRequestDto, Domain.Author>();
+                config.CreateMap<AuthorCommandRequestDto, Domain.Author>()
+                    .BeforeMap((dto, dom) => dom.Books = dto.Books.Select(bookRepo.Load));
                 config.CreateMap<AuthorUpdateRequestDto, Domain.Author>();
-                config.CreateMap<BookDto, Domain.Book>();
             });
             _Mapper = new Mapper(config);
 

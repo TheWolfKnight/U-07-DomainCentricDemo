@@ -48,14 +48,7 @@ namespace DomainCentricDemo.WebApp.Pages.Author
       AuthorDto author = _Query.Get(id.Value);
       if (author == null) return NotFound();
 
-      Author = new AuthorViewModel
-      {
-        Id = author.Id,
-        FirstName = author.FirstName,
-        SirName = author.SirName,
-        Books = author.Books,
-        RowVersion = author.RowVersion,
-      };
+      Author = _Mapper.Map<AuthorViewModel>(author);
 
       return Page();
     }

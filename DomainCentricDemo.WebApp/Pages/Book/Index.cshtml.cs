@@ -21,7 +21,7 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
             MapperConfiguration config = new MapperConfiguration(config => {
                 config.CreateMap<BookDto, BookViewModel>()
                     .BeforeMap((dto, viewModel) => {
-                        viewModel.AuthorIds = dto.Authors?.Select(auth => auth.Id);
+                        viewModel.AuthorIds = dto.Authors!.Select(auth => auth.Id);
                     });
             });
             _Mapper = new Mapper(config);

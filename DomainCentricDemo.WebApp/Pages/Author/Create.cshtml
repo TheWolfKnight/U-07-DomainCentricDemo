@@ -25,9 +25,9 @@
                 <span asp-validation-for="Author.SirName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author.Books" class="control-label">Select Books</label>
-                <select></select>
-                <span asp-validation-for="Author.Books" class="text-danger"></span>
+                <label asp-for="Author.BookIds" class="control-label">Select Books</label>
+                <select class ="form-group" multiple="multiple" asp-for="Author.BookIds" asp-items="Model.BookList"></select>
+                <span asp-validation-for="Author.BookIds" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
