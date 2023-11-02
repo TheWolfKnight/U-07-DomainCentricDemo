@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using DomainCentricDemo.Application.Dto;
 @model DomainCentricDemo.WebApp.Pages.Author.CreateModel
 
@@ -15,21 +15,21 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Author.FirstName" class="control-label">First Name</label>
+                <label asp-for="Author.FirstName" class="control-label fw-bold p-2">First Name</label>
                 <input asp-for="Author.FirstName" class="form-control" />
                 <span asp-validation-for="Author.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author.SirName" class="control-label">Surname</label>
+                <label asp-for="Author.SirName" class="control-label fw-bold p-2">Surname</label>
                 <input asp-for="Author.SirName" class="form-control" />
                 <span asp-validation-for="Author.SirName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author.BookIds" class="control-label">Select Books</label>
-                <select class ="form-group" multiple="multiple" asp-for="Author.BookIds" asp-items="Model.BookList"></select>
+                <label asp-for="Author.BookIds" class="control-label fw-bold p-2">Select Books</label>
+                <select class ="form-group form-select" multiple="multiple" asp-for="Author.BookIds" asp-items="Model.BookList"></select>
                 <span asp-validation-for="Author.BookIds" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
