@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model DomainCentricDemo.WebApp.Pages.Author.EditModel
 
 @{
@@ -15,20 +15,21 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Author.Id" />
             <div class="form-group">
-                <label asp-for="Author.FirstName" class="control-label"></label>
+                <label asp-for="Author.FirstName" class="control-label fw-bold p-2"></label>
                 <input asp-for="Author.FirstName" class="form-control" />
                 <span asp-validation-for="Author.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Author.SirName" class="control-label"></label>
+                <label asp-for="Author.SirName" class="control-label fw-bold p-2"></label>
                 <input asp-for="Author.SirName" class="form-control" />
                 <span asp-validation-for="Author.SirName" class="text-danger"></span>
             </div>
             <div class="form-group">
+	            <label asp-for="Author.BookIds" class="control-label fw-bold p-2">Books</label>
                 <label asp-for="Author.BookIds" class="control-label"></label>
                 <span asp-validation-for="Author.BookIds" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
