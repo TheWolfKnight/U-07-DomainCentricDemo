@@ -22,12 +22,13 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
         void IAuthorRepository.Delete(Author author) => _db.Authors.Remove(author);
 
         Author IAuthorRepository.Load(int id) => _db.Authors
-            .AsNoTracking()
             .Include(auth => auth.Books)
+            .AsNoTracking()
             .First(auth => auth.Id == id);
 
-        IEnumerable<Author> IAuthorRepository.GetAll() => _db.Authors.AsNoTracking()
-            .Include(auth => auth.Books);
+        IEnumerable<Author> IAuthorRepository.GetAll() => _db.Authors
+            .Include(auth => auth.Books)
+            .AsNoTracking();
 
         void IAuthorRepository.Save(Author author) {
             if (author.Books != null)

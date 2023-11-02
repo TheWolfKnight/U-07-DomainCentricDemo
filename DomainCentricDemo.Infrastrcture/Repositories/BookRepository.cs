@@ -13,17 +13,18 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
         void IBookRepository.Delete(Book book) => _db.Books.Remove(book);
 
         Book IBookRepository.Load(int id) => _db.Books
-            .AsNoTracking()
             .Include(book => book.Authors)
+            .AsNoTracking()
             .First(book => book.Id == id);
 
         IEnumerable<Book> IBookRepository.GetAll() => _db.Books
-            .AsNoTracking()
-            .Include(book => book.Authors);
+            .Include(book => book.Authors)
+            .AsNoTracking();
 
         void IBookRepository.Create(Book book) => _db.Books.Add(book);
 
         void IBookRepository.Save(Book book) {
+            _db.ChangeTracker.Clear();
             if (book.Authors != null)
                 foreach (Author author in book.Authors)
                     _db.Attach(author);

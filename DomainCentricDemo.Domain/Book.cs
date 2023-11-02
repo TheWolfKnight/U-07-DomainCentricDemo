@@ -11,7 +11,7 @@ namespace DomainCentricDemo.Domain {
 
         [MinLength(1)]
         [MaxLength(5)]
-        public IEnumerable<Author>? Authors { get; set; }
+        public ICollection<Author>? Authors { get; set; } = new List<Author>();
 
         [Timestamp]
         public byte[] RowVersion { get; set; } = null!;

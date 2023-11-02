@@ -18,7 +18,7 @@ namespace DomainCentricDemo.Application.Implementation {
         public AuthorCommand(IAuthorRepository authorRepository, IBookRepository bookRepo) {
             MapperConfiguration config = new MapperConfiguration(config => {
                 config.CreateMap<AuthorCommandRequestDto, Domain.Author>()
-                    .BeforeMap((dto, dom) => dom.Books = dto.Books.Select(bookRepo.Load));
+                    .BeforeMap((dto, dom) => dom.Books = dto.BookIds.Select(bookRepo.Load).ToArray());
                 config.CreateMap<AuthorUpdateRequestDto, Domain.Author>();
             });
             _Mapper = new Mapper(config);
@@ -29,7 +29,7 @@ namespace DomainCentricDemo.Application.Implementation {
         void IAuthorCommand.Create(AuthorCommandRequestDto createRequest) {
             Domain.Author author = _Mapper.Map<Domain.Author>(createRequest);
 
-            _AuthorRepository.Create(author);
+            _AuthorRepository.Save(author);
             _AuthorRepository.Commit();
         }
 

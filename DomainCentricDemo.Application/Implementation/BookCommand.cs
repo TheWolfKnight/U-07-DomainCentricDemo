@@ -12,7 +12,7 @@ namespace DomainCentricDemo.Application.Implementation {
 
             MapperConfiguration config = new MapperConfiguration(config => {
                 config.CreateMap<BookCommandRequestDto, Domain.Book>()
-                    .BeforeMap((dto, dom) => dom.Authors = dto.AuthorIds.Select(authorRepo.Load));
+                    .BeforeMap((dto, dom) => dom.Authors = dto.AuthorIds.Select(authorRepo.Load).ToArray());
                 config.CreateMap<BookUpdateRequestDto, Domain.Book>();
             });
 
