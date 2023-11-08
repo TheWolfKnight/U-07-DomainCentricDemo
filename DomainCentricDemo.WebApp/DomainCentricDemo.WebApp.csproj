@@ -35,8 +35,4 @@
     <ProjectReference Include="..\DomainCentricDemo.Infrastrcture\DomainCentricDemo.Infrastrcture.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Policies\" />
-  </ItemGroup>
-
 </Project>
