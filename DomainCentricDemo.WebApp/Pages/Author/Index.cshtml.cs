@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using AutoMapper;
 using DomainCentricDemo.Application.Interface;
+using DomainCentricDemo.WebApp.MapperProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using DomainCentricDemo.Application.Dto;
-using AutoMapper;
-using Microsoft.CodeAnalysis.CSharp;
-
-namespace DomainCentricDemo.WebApp.Pages.Author
-{
+namespace DomainCentricDemo.WebApp.Pages.Author {
     public class IndexModel : PageModel
     {
-        public List<AuthorViewModel> Authors { get;set; } = default!;
+        public IEnumerable<AuthorViewModel> Authors { get;set; } = default!;
 
         private readonly IAuthorQuery _Query = null!;
         private readonly IBookQuery _BookQuery = null!;
@@ -20,28 +17,24 @@ namespace DomainCentricDemo.WebApp.Pages.Author
         {
             _Query = queryService;
             _BookQuery = bookQuery;
-            Authors = new List<AuthorViewModel>();
 
-            AutoMapper.IConfigurationProvider config = new MapperConfiguration(config => {
-                config.CreateMap<AuthorDto, AuthorViewModel>()
-                    .BeforeMap((dto, viewModel) => viewModel.BookIds = dto.Books.Select(book => book.Id));
+            MapperConfiguration config = new MapperConfiguration(config => {
+                Profile prfile = new AuthorMapperProfile(bookQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
         }
 
         public IActionResult OnGet()
         {
-            foreach (AuthorDto dto in _Query.GetAll()) {
-                Authors.Add(_Mapper.Map<AuthorViewModel>(dto));
-            }
-
+            Authors = _Query.GetAll().Select(_Mapper.Map<AuthorViewModel>);
             return Page();
         }
 
         public string GetBooksTitles(AuthorViewModel author) {
 
             string result = string.Empty;
-            result = string.Join(", ", author.BookIds.Take(4).Select(_BookQuery.Get).Select(book => book.Title));
+            result = string.Join(", ", author.BookIds!.Take(4).Select(_BookQuery.Get).Select(book => book.Title));
             result = string.Join("", result.Take(17));
             result = result.PadRight(20, '.');
             return result;

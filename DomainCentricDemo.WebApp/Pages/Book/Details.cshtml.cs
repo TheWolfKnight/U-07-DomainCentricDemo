@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
+using DomainCentricDemo.WebApp.MapperProfiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,11 +14,12 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         [BindProperty]
         public BookViewModel Book { get; set; } = default!;
 
-        public DetailsModel(IBookQuery query) {
+        public DetailsModel(IBookQuery query, IAuthorQuery authorQuery) {
             _Query = query;
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<Domain.Book, BookViewModel>();
+                Profile prfile = new BookMapperProfile(authorQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
 

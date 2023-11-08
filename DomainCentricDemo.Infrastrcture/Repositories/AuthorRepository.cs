@@ -31,6 +31,7 @@ namespace DomainCentricDemo.Infrastrcture.Repositories {
             .AsNoTracking();
 
         void IAuthorRepository.Save(Author author) {
+            _db.ChangeTracker.Clear();
             if (author.Books != null)
                 foreach (Book book in author.Books)
                     _db.Attach(book);

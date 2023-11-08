@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
-using DomainCentricDemo.WebApp.Pages.Author;
+using DomainCentricDemo.WebApp.MapperProfiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,16 +21,17 @@ public class CreateModel : PageModel {
 
     public SelectList AuthorList { get; set; }
 
-    public CreateModel(IBookCommand bookCommand, IAuthorQuery query) {
+    public CreateModel(IBookCommand bookCommand, IAuthorQuery authorQuery, IBookQuery bookQuery) {
         _BookCommand = bookCommand;
-        AuthorQuery = query;
+        AuthorQuery = authorQuery;
 
         MapperConfiguration config = new MapperConfiguration(config => {
-            config.CreateMap<BookViewModel, BookCommandRequestDto>();
+            Profile prfile = new BookMapperProfile(authorQuery);
+            config.AddProfile(prfile);
         });
         _Mapper = new Mapper(config);
 
-        AuthorList = new SelectList(query.GetAll()
+        AuthorList = new SelectList(authorQuery.GetAll()
                                      .Select(auth => new { Id = auth.Id, FullName = $"{auth.SirName} {auth.FirstName}" }),
                                     "Id", "FullName");
     }

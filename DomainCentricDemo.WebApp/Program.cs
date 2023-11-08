@@ -6,6 +6,7 @@ using DomainCentricDemo.Infrastrcture.Repositories;
 using DomainCentricDemo.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBookQuery, BookQuery>();
 builder.Services.AddScoped<IBookCommand, BookCommand>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddDbContext<BookContext>(options =>
     options.UseSqlServer(

@@ -10,6 +10,7 @@ using DomainCentricDemo.Infrastrcture;
 using DomainCentricDemo.Application.Interface;
 using DomainCentricDemo.Application.Dto;
 using AutoMapper;
+using DomainCentricDemo.WebApp.MapperProfiles;
 
 namespace DomainCentricDemo.WebApp.Pages.Author
 {
@@ -23,14 +24,15 @@ namespace DomainCentricDemo.WebApp.Pages.Author
         [BindProperty]
         public AuthorViewModel Author { get; set; } = default!;
 
-        public DeleteModel(IAuthorCommand command, IAuthorQuery query)
+        public DeleteModel(IAuthorCommand command, IAuthorQuery authorQuery, IBookQuery bookQuery)
         {
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<AuthorDeleteRequestDto, AuthorDto>();
+                Profile prfile = new AuthorMapperProfile(bookQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
 
-            _Query = query;
+            _Query = authorQuery;
             _Command = command;
         }
 

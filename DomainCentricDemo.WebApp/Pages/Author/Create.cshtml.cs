@@ -8,6 +8,7 @@ using DomainCentricDemo.Application.Interface;
 using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using DomainCentricDemo.WebApp.MapperProfiles;
 
 namespace DomainCentricDemo.WebApp.Pages.Author
 {
@@ -25,7 +26,8 @@ namespace DomainCentricDemo.WebApp.Pages.Author
 
         public CreateModel(IAuthorCommand command, IBookQuery bookQuery) {
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<AuthorViewModel, AuthorCommandRequestDto>();
+                Profile prfile = new AuthorMapperProfile(bookQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
 

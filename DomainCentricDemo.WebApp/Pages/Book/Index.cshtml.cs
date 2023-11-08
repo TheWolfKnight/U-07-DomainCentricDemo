@@ -1,8 +1,10 @@
 using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
+using DomainCentricDemo.Infrastrcture.Queries;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using DomainCentricDemo.WebApp.MapperProfiles;
 
 
 namespace DomainCentricDemo.WebApp.Pages.Book {
@@ -12,31 +14,25 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
 
         private readonly IMapper _Mapper;
 
-        public List<BookViewModel> Books { get; set; } = null!;
+        public IEnumerable<BookViewModel> Books { get; set; } = null!;
 
-        public IndexModel(IBookQuery queryService, IAuthorQuery authorQuery) {
-            _BookQuery = queryService;
-            Books = new List<BookViewModel>();
+        public IndexModel(IBookQuery bookQuery, IAuthorQuery authorQuery) {
+            _BookQuery = bookQuery;
+            _AuthorQuery = authorQuery;
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<BookDto, BookViewModel>()
-                    .BeforeMap((dto, viewModel) => {
-                        viewModel.AuthorIds = dto.Authors!.Select(auth => auth.Id);
-                    });
+                Profile prfile = new BookMapperProfile(authorQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
-            _AuthorQuery = authorQuery;
         }
 
         /// <summary>
         /// Her vil vi gerne returnere en liste af b�ger
         /// </summary>
-        public void OnGet() {
-            IEnumerable<BookDto> bookDtos = _BookQuery.GetAll();
-
-            foreach (BookDto book in bookDtos) {
-                Books.Add(_Mapper.Map<BookViewModel>(book));
-            }
+        public IActionResult OnGet() {
+            Books = _BookQuery.GetAll().Select(_Mapper.Map<BookViewModel>);
+            return Page();
         }
 
         public IEnumerable<AuthorDto> GetBookAuthors(BookViewModel book) {

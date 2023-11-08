@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DomainCentricDemo.Application.Dto;
 using DomainCentricDemo.Application.Interface;
-using DomainCentricDemo.WebApp.Pages.Author;
+using DomainCentricDemo.WebApp.MapperProfiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,15 +17,14 @@ namespace DomainCentricDemo.WebApp.Pages.Book {
         [BindProperty]
         public BookViewModel Book { get; set; } = default!;
 
-        public EditModel(IBookQuery query, IBookCommand command, IAuthorQuery authorQuery) {
+        public EditModel(IBookQuery bookQuery, IBookCommand command, IAuthorQuery authorQuery) {
             _AuthorQuery = authorQuery;
-            _BookQuery = query;
+            _BookQuery = bookQuery;
             _Command = command;
 
             MapperConfiguration config = new MapperConfiguration(config => {
-                config.CreateMap<BookDto, BookViewModel>()
-                    .BeforeMap((dto, viewModel) => viewModel.AuthorIds = dto.Authors?.Select(auth => auth.Id));
-                config.CreateMap<BookViewModel, BookUpdateRequestDto>();
+                Profile prfile = new BookMapperProfile(authorQuery);
+                config.AddProfile(prfile);
             });
             _Mapper = new Mapper(config);
         }

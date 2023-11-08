@@ -11,6 +11,7 @@ using DomainCentricDemo.Infrastrcture;
 using DomainCentricDemo.Application.Interface;
 using DomainCentricDemo.Application.Dto;
 using AutoMapper;
+using DomainCentricDemo.WebApp.MapperProfiles;
 
 namespace DomainCentricDemo.WebApp.Pages.Author
 {
@@ -22,18 +23,17 @@ namespace DomainCentricDemo.WebApp.Pages.Author
 
     private readonly IMapper _Mapper;
 
-    public EditModel(IAuthorQuery query, IAuthorCommand command)
+    public EditModel(IAuthorQuery authorQuery, IAuthorCommand command, IBookQuery bookQuery)
     {
-      _Command = command;
-      _Query = query;
+            _Command = command;
+            _Query = authorQuery;
 
-      MapperConfiguration config = new MapperConfiguration(config =>
-      {
-        config.CreateMap<AuthorDto, AuthorViewModel>();
-        config.CreateMap<AuthorViewModel, AuthorCommandRequestDto>();
-      });
-      _Mapper = new Mapper(config);
-    }
+            MapperConfiguration config = new MapperConfiguration(config => {
+                Profile prfile = new AuthorMapperProfile(bookQuery);
+                config.AddProfile(prfile);
+            });
+            _Mapper = new Mapper(config);
+        }
 
     [BindProperty]
     public AuthorViewModel Author { get; set; } = default!;

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainCentricDemo.Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainCentricDemo.WebApp", "DomainCentricDemo.WebApp\DomainCentricDemo.WebApp.csproj", "{C75847EB-A3FE-4E21-9D4D-E430FB73BA01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainCentricDemo.Infrastrcture", "DomainCentricDemo.Infrastrcture\DomainCentricDemo.Infrastrcture.csproj", "{3E0B74EC-75F8-4F90-B9BB-37DCFDB1FE2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainCentricDemo.Infrastrcture", "DomainCentricDemo.Infrastrcture\DomainCentricDemo.Infrastrcture.csproj", "{3E0B74EC-75F8-4F90-B9BB-37DCFDB1FE2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
